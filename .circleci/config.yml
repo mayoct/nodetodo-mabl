@@ -1,0 +1,80 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@4.2.1
+  cloud-run: circleci/gcp-cloud-run@1.0.2
+
+workflows:
+  version: 2
+  my_workflow_for_nodetodo:
+    jobs:
+      - build_api
+      - test_api:
+          requires:
+            - build_api
+      - release_api:
+          requires:
+            - test_api
+      - deploy_api:
+          requires:
+            - release_api
+
+jobs:
+  build_api:
+    docker:
+      - image: "cimg/node:current"
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package-lock.json" }}
+            - v1-dependencies-
+      - run:
+          command: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package-lock.json" }}
+      - persist_to_workspace:
+          root: ~/project
+          paths:
+            - node_modules/*
+  test_api:
+    docker:
+      - image: "cimg/node:current"
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/project
+      - run:
+          command: mkdir reports
+      - run:
+          command: npx eslint . --ext .js --format junit --output-file ./reports/eslint/eslint.xml
+      - run:
+          command: npx nyc report --reporter=lcov
+      - store_test_results:
+          path: ./reports
+      - store_artifacts:
+          path: ./reports
+      - store_artifacts:
+          path: ./coverage
+  release_api:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - checkout
+      - cloud-run/init
+      - cloud-run/build:
+          tag: "gcr.io/${GOOGLE_PROJECT_ID}/nodetodo-${CIRCLE_SHA1}"
+  deploy_api:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - checkout
+      - cloud-run/init
+      - cloud-run/deploy:
+          image: "gcr.io/${GOOGLE_PROJECT_ID}/nodetodo-${CIRCLE_SHA1}"
+          platform: managed
+          region: us-central1
+          service-name: nodetodo
+          unauthenticated: true

@@ -79,5 +79,5 @@ jobs:
   run_mabl_tests:
     machine: true
     steps:
-      - trigger-tests/test:
+      - trigger-tests/run-tests:
           application-id: qG8IvB1fl9qIsB9RTh5jnw-a

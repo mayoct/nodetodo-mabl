@@ -3,12 +3,6 @@ version: 2.1
 orbs:
   node: circleci/node@4.2.1
   cloud-run: circleci/gcp-cloud-run@1.0.2
-  jobs:
-    run_mabl_tests:
-      machine: true
-      steps:
-        - trigger-tests/test:
-            application-id: qG8IvB1fl9qIsB9RTh5jnw-a
   trigger-tests: mabl/trigger-tests@1.0.5
 
 workflows:
@@ -82,3 +76,8 @@ jobs:
           region: us-central1
           service-name: nodetodo
           unauthenticated: true
+  run_mabl_tests:
+    machine: true
+    steps:
+      - trigger-tests/test:
+          application-id: qG8IvB1fl9qIsB9RTh5jnw-a

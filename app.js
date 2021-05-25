@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const app = express();
 const fs = require('fs');
@@ -10,13 +11,13 @@ app.get('/c', (req, res) => {
 });
 
 // Read
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
     var body = read_impl();
     res.send(body);
 });
 
 // Update
-app.get('/u', (req, res) => {
+app.get('/u', (_req, _res) => {
     // not implemented
 });
 
@@ -97,6 +98,7 @@ function input_tag(type, name, value) {
 }
 
 // Server
+// eslint-disable-next-line no-undef
 const PORT = process.env.PORT || 8080;
 const HOST = '0.0.0.0';
 module.exports = app.listen(PORT, HOST);

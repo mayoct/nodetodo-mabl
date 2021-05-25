@@ -38,16 +38,21 @@ function create_impl(item) {
 function read_impl() {
     var items = load_items();
     var body = "<h1>NodeToDo</h1><div id='items'>";
+    body += "<table><thead><tr><th>Delete</th><th>Item</th></tr></thead>";
+    body += "<tbody>";
     var no = 1;
     for (var item of items) {
-        body += `<p><a href="/d?delno=${no}">x</a> ${item}</p>`;
+        body += "<tr>";
+        body += `<td><a href="/d?delno=${no}">x</a></td><td>${item}</td>`;
+        body += "</tr>";
         no++;
     }
-    body += "<form action='/c'><p class='frm'>New item: ";
-    body += "<input type='text' name='item'>";
-    body += "<input type='submit' value='Add'>";
-    body += "</p></form></div>"
-
+    body += "<tr><form action='/c'><td>New item</td>";
+    body += "<td><input type='text' name='item'>";
+    body += "<input type='submit' value='Add'></td>";
+    body += "</form></tr>";
+    body += "</tbody></table>";
+    
     return body;
 }
 

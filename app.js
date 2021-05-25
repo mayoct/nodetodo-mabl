@@ -49,7 +49,7 @@ function read_impl() {
     body += "</p></form></div>"
 
     return body;
-};
+}
 
 function update_impl() {
     // not implemented

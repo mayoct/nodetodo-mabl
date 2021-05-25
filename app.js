@@ -38,7 +38,7 @@ function create_impl(item) {
 function read_impl() {
     var items = load_items();
     var body = "<h1>NodeToDo</h1><div id='items'>";
-    body += "<table><thead><tr><th>Delete</th><th>Item</th></tr></thead>";
+    body += "<table><thead><tr><th>Done</th><th>Item</th></tr></thead>";
     body += "<tbody>";
     var no = 1;
     for (var item of items) {
@@ -52,7 +52,7 @@ function read_impl() {
     body += "<input type='submit' value='Add'></td>";
     body += "</form></tr>";
     body += "</tbody></table>";
-    
+
     return body;
 }
 

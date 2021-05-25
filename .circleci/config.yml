@@ -8,19 +8,19 @@ workflows:
   version: 2
   my_workflow_for_nodetodo:
     jobs:
-      - build_api
-      - test_api:
+      - build_web
+      - test_web:
           requires:
-            - build_api
-      - release_api:
+            - build_web
+      - release_web:
           requires:
-            - test_api
-      - deploy_api:
+            - test_web
+      - deploy_web:
           requires:
-            - release_api
+            - release_web
 
 jobs:
-  build_api:
+  build_web:
     docker:
       - image: "cimg/node:current"
     steps:
@@ -39,7 +39,7 @@ jobs:
           root: ~/project
           paths:
             - node_modules/*
-  test_api:
+  test_web:
     docker:
       - image: "cimg/node:current"
     steps:
@@ -50,15 +50,9 @@ jobs:
           command: mkdir reports
       - run:
           command: npx eslint . --ext .js --format junit --output-file ./reports/eslint/eslint.xml
-      - run:
-          command: npx nyc report --reporter=lcov
       - store_test_results:
           path: ./reports
-      - store_artifacts:
-          path: ./reports
-      - store_artifacts:
-          path: ./coverage
-  release_api:
+  release_web:
     docker:
       - image: "cimg/base:stable"
     steps:
@@ -66,7 +60,7 @@ jobs:
       - cloud-run/init
       - cloud-run/build:
           tag: "gcr.io/${GOOGLE_PROJECT_ID}/nodetodo-${CIRCLE_SHA1}"
-  deploy_api:
+  deploy_web:
     docker:
       - image: "cimg/base:stable"
     steps:

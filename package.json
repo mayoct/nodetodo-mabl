@@ -9,6 +9,8 @@
   "author": "Masahiko Funaki",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "eslint": "^7.27.0",
+    "express": "^4.17.1",
+    "nyc": "^15.1.0"
   }
 }

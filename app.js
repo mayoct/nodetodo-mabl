@@ -37,7 +37,7 @@ function create_impl(item) {
 
 function read_impl() {
     var items = load_items();
-    var body = "<html><head><link rel="stylesheet" href="css/style.css"></head>;
+    var body = "<html><head><link rel='stylesheet' href='css/style.css'></head>";
     body += "<body><h1>NodeToDo</h1><div id='items'>";
     body += "<table><thead><tr><th>Done</th><th>Item</th></tr></thead>";
     body += "<tbody>";

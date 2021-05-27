@@ -28,6 +28,15 @@ app.get('/d', (req, res) => {
     res.send(body);
 });
 
+// css
+app.get('/css/style.css', (req, res) => {
+    fs.readFile("./css/style.css", function (err, data) {
+        res.writeHead(200, { "Content-Type": "text/css" });
+        res.write(data);
+        res.end();
+    });
+});
+
 function create_impl(item) {
     var items = load_items();
     items.push(item);
@@ -44,7 +53,7 @@ function read_impl() {
     var no = 1;
     for (var item of items) {
         body += "<tr>";
-        body += `<td><a href="/d?delno=${no}">x</a></td><td>${item}</td>`;
+        body += `<td><a href="/d?delno=${no}">\u2713</a></td><td>${item}</td>`;
         body += "</tr>";
         no++;
     }

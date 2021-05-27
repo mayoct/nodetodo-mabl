@@ -57,6 +57,9 @@ function read_impl() {
         body += `<td><a href="/d?delno=${no}">\u2713</a></td><td>${item}</td>`;
         body += "</tr>";
     }
+    if (no == 0) {
+        body += "<tr><td colspan='2'>All done!</td></tr>";
+    }
     body += "<tr><td colspan='2'><form action='/c'>New item: ";
     body += "<input type='text' name='item'> ";
     body += "<input type='submit' value='Add'>";

@@ -3,5 +3,5 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY . .
-RUN mkdir -p ./css && cp ./css/style.css ./css
+ADD css/ /usr/src/app/css/
 CMD [ "node", "app.js" ]

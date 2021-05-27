@@ -37,7 +37,8 @@ function create_impl(item) {
 
 function read_impl() {
     var items = load_items();
-    var body = "<h1>NodeToDo</h1><div id='items'>";
+    var body = "<html><head><link rel="stylesheet" href="css/style.css"></head>;
+    body += "<body><h1>NodeToDo</h1><div id='items'>";
     body += "<table><thead><tr><th>Done</th><th>Item</th></tr></thead>";
     body += "<tbody>";
     var no = 1;
@@ -51,7 +52,7 @@ function read_impl() {
     body += "<td><input type='text' name='item'>";
     body += "<input type='submit' value='Add'></td>";
     body += "</form></tr>";
-    body += "</tbody></table>";
+    body += "</tbody></table></div></body></html>";
 
     return body;
 }

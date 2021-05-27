@@ -57,10 +57,10 @@ function read_impl() {
         body += "</tr>";
         no++;
     }
-    body += "<tr><form action='/c'><td>New item</td>";
-    body += "<td><input type='text' name='item'>";
-    body += "<input type='submit' value='Add'></td>";
-    body += "</form></tr>";
+    body += "<tr><td colspan='2'><form action='/c'>New item: ";
+    body += "<input type='text' name='item'> ";
+    body += "<input type='submit' value='Add'>";
+    body += "</form></td></tr>";
     body += "</tbody></table></div></body></html>";
 
     return body;

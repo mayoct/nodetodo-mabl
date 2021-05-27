@@ -50,12 +50,12 @@ function read_impl() {
     body += "<body><h1>NodeToDo</h1><div id='items'>";
     body += "<table><thead><tr><th>Done</th><th>Item</th></tr></thead>";
     body += "<tbody>";
-    var no = 1;
+    var no = 0;
     for (var item of items) {
+        no++;
         body += "<tr>";
         body += `<td><a href="/d?delno=${no}">\u2713</a></td><td>${item}</td>`;
         body += "</tr>";
-        no++;
     }
     body += "<tr><td colspan='2'><form action='/c'>New item: ";
     body += "<input type='text' name='item'> ";
@@ -86,14 +86,19 @@ function delete_impl(delno) {
 
 function load_items() {
     var text;
+    var items = [];
+
     if (fs.existsSync('todos.txt')) {
         text = fs.readFileSync('todos.txt', 'utf-8');
 
     } else {
-        text = "lint\nunit test\ne2e test";
+        text = "lint\nunit test\ne2e test\n";
+    }
+    
+    if (text.length > 0) {
+        items = text.slice(0, -1).split(/\n/);        
     }
 
-    var items = text.split(/\n/);
     return items;
 }
 
@@ -102,8 +107,6 @@ function save_items(items) {
     for (var item of items) {
         text = text + item + '\n';
     }
-    text = text.slice(0, -1);
-
     fs.writeFileSync('todos.txt', text, 'utf-8');
 }
 

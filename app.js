@@ -53,7 +53,7 @@ function read_impl() {
     var no = 0;
     for (var item of items) {
         no++;
-        body += "<tr>";
+        body += `<tr recno='${no}'>`;
         body += `<td><a href="/d?delno=${no}">\u2713</a></td><td>${item}</td>`;
         body += "</tr>";
     }

@@ -19,9 +19,9 @@ workflows:
       - deploy_web:
           requires:
             - release_web
-      - run_mabl_tests:
-          requires:
-            - deploy_web
+#      - run_mabl_tests:
+#          requires:
+#            - deploy_web
 
 jobs:
   build_web:

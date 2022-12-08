@@ -67,14 +67,15 @@ jobs:
       - checkout
       - attach_workspace:
           at: ~/project
+      - docker/check
       - docker/build:
-          image: mfunaki/nodetodo
+          image: mfunaki/cci-nodetodo-mabl
           tag: latest
           lint-dockerfile: true
           treat-warnings-as-errors: true
       - docker/push:
           digest-path: /tmp/digest.txt
-          image: mfunaki/nodetodo
+          image: mfunaki/cci-nodetodo-mabl
           tag: latest
       - run:
           command: |

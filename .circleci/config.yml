@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   node: circleci/node@5.0.3
   docker: circleci/docker@2.2.0
+  aws-ecr: circleci/aws-ecr@8.1.3
   trigger-tests: mabl/trigger-tests@1.0.8
 
 workflows:
@@ -12,8 +13,8 @@ workflows:
       - test_web:
           requires:
             - build_web
-      - release_container:
-          context: docker
+      - release_image:
+          context: aws
           requires:
             - build_web
 #      - release_web:
@@ -59,28 +60,19 @@ jobs:
           command: npx eslint . --ext .js --format junit --output-file ./reports/eslint/eslint.xml
       - store_test_results:
           path: ./reports
-  release_container:
+  release_image:
     docker:
       - image: "cimg/node:current"
     steps:
-      - setup_remote_docker
       - checkout
       - attach_workspace:
           at: ~/project
-      - docker/check
-      - docker/build:
-          image: mfunaki/cci-nodetodo-mabl
-          tag: latest
-          lint-dockerfile: true
-          treat-warnings-as-errors: true
-      - docker/push:
-          digest-path: /tmp/digest.txt
-          image: mfunaki/cci-nodetodo-mabl
-          tag: latest
-      - run:
-          command: |
-            echo "Digest is: $(</tmp/digest.txt)"
-  deploy_web:
+      - aws-ecr/build-and-push-image:
+          create-repo: true
+          setup-remote-docker: true
+          remote-docker-layer-caching: true
+          repo: cci-nodetodo
+  deploy_container:
     docker:
       - image: "cimg/base:stable"
     steps:

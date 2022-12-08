@@ -75,6 +75,7 @@ jobs:
       - docker/push:
           digest-path: /tmp/digest.txt
           image: mfunaki/nodetodo
+          tag: latest
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"

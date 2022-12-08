@@ -60,7 +60,8 @@ jobs:
       - store_test_results:
           path: ./reports
   release_container:
-    executor: docker/docker
+    docker:
+      - image: "cimg/node:current"
     steps:
       - setup_remote_docker
       - checkout

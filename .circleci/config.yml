@@ -1,24 +1,23 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.2.1
+  node: circleci/node@4.2.3
   cloud-run: circleci/gcp-cloud-run@1.0.2
-  trigger-tests: mabl/trigger-tests@1.0.5
+  trigger-tests: mabl/trigger-tests@1.0.8
 
 workflows:
-  version: 2
   my_workflow_for_nodetodo:
     jobs:
       - build_web
       - test_web:
           requires:
             - build_web
-      - release_web:
-          requires:
-            - test_web
-      - deploy_web:
-          requires:
-            - release_web
+#      - release_web:
+#          requires:
+#            - test_web
+#      - deploy_web:
+#          requires:
+#            - release_web
 #      - run_mabl_tests:
 #          requires:
 #            - deploy_web

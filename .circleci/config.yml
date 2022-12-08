@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.3
-  cloud-run: circleci/gcp-cloud-run@1.0.2
+  docker: circleci/docker@2.2.0
   trigger-tests: mabl/trigger-tests@1.0.8
 
 workflows:
@@ -10,6 +10,10 @@ workflows:
     jobs:
       - build_web
       - test_web:
+          requires:
+            - build_web
+      - release_container:
+          context: docker
           requires:
             - build_web
 #      - release_web:
@@ -55,14 +59,24 @@ jobs:
           command: npx eslint . --ext .js --format junit --output-file ./reports/eslint/eslint.xml
       - store_test_results:
           path: ./reports
-  release_web:
-    docker:
-      - image: "cimg/base:stable"
+  release_container:
+    executor: docker/docker
     steps:
+      - setup_remote_docker
       - checkout
-      - cloud-run/init
-      - cloud-run/build:
-          tag: "gcr.io/${GOOGLE_PROJECT_ID}/nodetodo-${CIRCLE_SHA1}"
+      - attach_workspace:
+          at: ~/project
+      - docker/build:
+          image: mfunaki/nodetodo
+          tag: latest
+          lint-dockerfile: true
+          treat-warnings-as-errors: true
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: mfunaki/nodetodo
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
   deploy_web:
     docker:
       - image: "cimg/base:stable"

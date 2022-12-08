@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.2.3
+  node: circleci/node@5.0.3
   cloud-run: circleci/gcp-cloud-run@1.0.2
   trigger-tests: mabl/trigger-tests@1.0.8
 

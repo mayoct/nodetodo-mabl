@@ -14,7 +14,7 @@ workflows:
       - release_image:
           context: aws
           requires:
-            - build_web
+            - test_web
       - run_mabl_tests:
           requires:
             - release_image

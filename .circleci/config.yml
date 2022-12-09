@@ -1,8 +1,6 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@5.0.3
-  docker: circleci/docker@2.2.0
   aws-ecr: circleci/aws-ecr@8.1.3
   trigger-tests: mabl/trigger-tests@1.0.8
 
@@ -17,15 +15,9 @@ workflows:
           context: aws
           requires:
             - build_web
-#      - release_web:
-#          requires:
-#            - test_web
-#      - deploy_web:
-#          requires:
-#            - release_web
-#      - run_mabl_tests:
-#          requires:
-#            - deploy_web
+      - run_mabl_tests:
+          requires:
+            - release_image
 
 jobs:
   build_web:
@@ -72,23 +64,14 @@ jobs:
           setup-remote-docker: true
           remote-docker-layer-caching: true
           repo: cci-nodetodo
-  deploy_container:
-    docker:
-      - image: "cimg/base:stable"
-    steps:
-      - checkout
-      - cloud-run/init
-      - cloud-run/deploy:
-          image: "gcr.io/${GOOGLE_PROJECT_ID}/nodetodo-${CIRCLE_SHA1}"
-          platform: managed
-          region: us-central1
-          service-name: nodetodo
-          unauthenticated: true
   run_mabl_tests:
     machine: true
     steps:
       - trigger-tests/run-tests:
-          application-id: qG8IvB1fl9qIsB9RTh5jnw-a
+          application-id: naMfa4ho96G0Al0ccA8KcA-a
+          environment-id: Ba4jXgdJPoZdWrfPEzAFBw-e
       - trigger-tests/parse-results
       - store_test_results:
           path: ./test-results
+
+# VS Code Extension Version: 1.4.0

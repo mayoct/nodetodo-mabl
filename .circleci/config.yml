@@ -14,7 +14,7 @@ workflows:
       - release_image:
           context: aws
           requires:
-            - build_web
+            - test_web
       - run_mabl_tests:
           requires:
             - release_image
@@ -73,5 +73,3 @@ jobs:
       - trigger-tests/parse-results
       - store_test_results:
           path: ./test-results
-
-# VS Code Extension Version: 1.4.0

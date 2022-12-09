@@ -73,5 +73,3 @@ jobs:
       - trigger-tests/parse-results
       - store_test_results:
           path: ./test-results
-
-# VS Code Extension Version: 1.4.0

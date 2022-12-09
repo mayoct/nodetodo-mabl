@@ -1,27 +1,23 @@
 version: 2.1
 
 orbs:
-  node: circleci/node@4.2.1
-  cloud-run: circleci/gcp-cloud-run@1.0.2
-  trigger-tests: mabl/trigger-tests@1.0.5
+  aws-ecr: circleci/aws-ecr@8.1.3
+  trigger-tests: mabl/trigger-tests@1.0.8
 
 workflows:
-  version: 2
   my_workflow_for_nodetodo:
     jobs:
       - build_web
       - test_web:
           requires:
             - build_web
-      - release_web:
+      - release_image:
+          context: aws
           requires:
             - test_web
-      - deploy_web:
+      - run_mabl_tests:
           requires:
-            - release_web
-#      - run_mabl_tests:
-#          requires:
-#            - deploy_web
+            - release_image
 
 jobs:
   build_web:
@@ -56,31 +52,24 @@ jobs:
           command: npx eslint . --ext .js --format junit --output-file ./reports/eslint/eslint.xml
       - store_test_results:
           path: ./reports
-  release_web:
+  release_image:
     docker:
-      - image: "cimg/base:stable"
+      - image: "cimg/node:current"
     steps:
       - checkout
-      - cloud-run/init
-      - cloud-run/build:
-          tag: "gcr.io/${GOOGLE_PROJECT_ID}/nodetodo-${CIRCLE_SHA1}"
-  deploy_web:
-    docker:
-      - image: "cimg/base:stable"
-    steps:
-      - checkout
-      - cloud-run/init
-      - cloud-run/deploy:
-          image: "gcr.io/${GOOGLE_PROJECT_ID}/nodetodo-${CIRCLE_SHA1}"
-          platform: managed
-          region: us-central1
-          service-name: nodetodo
-          unauthenticated: true
+      - attach_workspace:
+          at: ~/project
+      - aws-ecr/build-and-push-image:
+          create-repo: true
+          setup-remote-docker: true
+          remote-docker-layer-caching: true
+          repo: cci-nodetodo
   run_mabl_tests:
     machine: true
     steps:
       - trigger-tests/run-tests:
-          application-id: qG8IvB1fl9qIsB9RTh5jnw-a
+          application-id: naMfa4ho96G0Al0ccA8KcA-a
+          environment-id: Ba4jXgdJPoZdWrfPEzAFBw-e
       - trigger-tests/parse-results
       - store_test_results:
           path: ./test-results

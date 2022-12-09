@@ -1,2 +1,2 @@
-# nodetodo
-[![<mfunaki>](https://circleci.com/gh/mfunaki/nodetodo.svg?style=svg)](<https://app.circleci.com/pipelines/gh/mfunaki/nodetodo>)
+# nodetodo-mabl
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/mayoct/nodetodo-mabl/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/mayoct/nodetodo-mabl/tree/master)
